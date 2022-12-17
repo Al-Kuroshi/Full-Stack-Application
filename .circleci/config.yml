@@ -99,7 +99,7 @@ commands:
             - v1-dependencies-
       - run:
           name: Install Client Dependencies
-          command: yarn client:install
+          command: yarn udagram-frontend:install
       - save_cache:
           paths:
             - node_modules
@@ -113,7 +113,7 @@ commands:
             - v2-dependencies-
       - run:
           name: Install Server Dependencies
-          command: yarn server:install
+          command: yarn udagram-api:install
       - save_cache:
           paths:
             - node_modules
@@ -146,10 +146,10 @@ jobs:
       - install_server
       - run:
           name: Test Client
-          command: yarn client:test
+          command: yarn udagram-frontend:test
       - run:
           name: Test Server
-          command: yarn server:test
+          command: yarn udagram-api:test
   deploy:
     docker:
       - image: "cimg/base:stable"
@@ -163,10 +163,10 @@ jobs:
       - install_server
       - run:
           name: Deploy Client
-          command: yarn client:deploy
+          command: yarn udagram-frontend:deploy1
       - run:
           name: Deploy Server
-          command: yarn server:deploy
+          command: yarn udagram-api:deploy
 
 workflows:
   build_test_deploy:
