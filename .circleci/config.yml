@@ -1,180 +1,78 @@
-#version: 2.1
-#orbs:
-#  # orgs contain basc recipes and reproducible actions (install node, aws, etc.)
-#  node: circleci/node@5.0.2
-#  eb: circleci/aws-elastic-beanstalk@2.0.1
-#  aws-cli: circleci/aws-cli@3.1.1
-#  # different jobs are calles later in the workflows sections
-#jobs:
-#  build:
-#    docker:
-#      # the base image can run most needed actions with orbs
-#      - image: "cimg/node:14.15"
-#    steps:
-#      # install node and checkout code
-#      - node/install:
-#          node-version: '14.15'
-#      - checkout
-#      # Use root level package.json to install dependencies in the frontend app
-#      - run:
-#          name: Install Front-End Dependencies
-#          command: |
-#            echo "NODE --version"
-#            echo $(node --version)
-#            echo "NPM --version"
-#            echo $(npm --version)
-#            npm run frontend:install
-#      # TODO: Install dependencies in the the backend API
-#      - run:
-#          name: Install API Dependencies
-#          command: |
-#           echo "TODO: Install dependencies in the the backend API  "
-#      # TODO: Lint the frontend
-#      - run:
-#          name: Front-End Lint
-#          command: |
-#            echo "TODO: Lint the frontend"
-#      # TODO: Build the frontend app
-#      - run:
-#          name: Front-End Build
-#          command: |
-#            echo "TODO: Build the frontend app"
-#      # TODO: Build the backend API
-#      - run:
-#          name: API Build
-#          command: |
-#            echo "TODO: Build the backend API"
-#  # deploy step will run only after manual approval
-#  deploy:
-#    docker:
-#      - image: "cimg/base:stable"
-#      # more setup needed for aws, node, elastic beanstalk
-#    steps:
-#      - node/install:
-#          node-version: '14.15'
-#      - eb/setup
-#      - aws-cli/setup
-#      - checkout
-#      - run:
-#          name: Deploy App
-#          # TODO: Install, build, deploy in both apps
-#          command: |
-#            echo "# TODO: Install, build, deploy in both apps"
-#
-#workflows:
-#  udagram:
-#    jobs:
-#      - build
-#      - hold:
-#          filters:
-#            branches:
-#              only:
-#                - master
-#          type: approval
-#          requires:
-#            - build
-#      - deploy:
-#          requires:
-#            - hold
-
-
 version: 2.1
-
 orbs:
-  node: circleci/node@4.1.0
-  aws-cli: circleci/aws-cli@2.0.3
-  eb: circleci/aws-elastic-beanstalk@1.0.0
-
-commands:
-  install_client:
-    description: "command for Client Installation"
-    steps:
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            # Find a cache corresponding to this specific package.json checksum
-            # when this file is changed, this key will fail
-            - v1-dependencies-{{ checksum "package.json" }}
-            # Find the most recently generated cache used from any branch
-            - v1-dependencies-
-      - run:
-          name: Install Client Dependencies
-          command: npm run frontend:install
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-  install_server:
-    description: "command for Server Installation"
-    steps:
-      - restore_cache:
-          keys:
-            - v2-dependencies-{{ checksum "package.json" }}
-            - v2-dependencies-
-      - run:
-          name: Install Server Dependencies
-          command: npm run api:install
-      - save_cache:
-          paths:
-            - node_modules
-          key: v2-dependencies-{{ checksum "package.json" }}
-
+  # orgs contain basc recipes and reproducible actions (install node, aws, etc.)
+  node: circleci/node@5.0.2
+  eb: circleci/aws-elastic-beanstalk@2.0.1
+  aws-cli: circleci/aws-cli@3.1.1
+  # different jobs are calles later in the workflows sections
 jobs:
   build:
     docker:
-      - image: "cimg/base:stable"
+      # the base image can run most needed actions with orbs
+      - image: "cimg/node:14.15"
     steps:
-      - node/install
-      - node/install-yarn
+      # install node and checkout code
+      - node/install:
+          node-version: '14.15'
       - checkout
-      - install_client
-      - install_server
+      # Use root level package.json to install dependencies in the frontend app
       - run:
-          name: Build Client
-          command: npm run frontend:build
+          name: Install Front-End Dependencies
+          command: |
+            echo "NODE --version"
+            echo $(node --version)
+            echo "NPM --version"
+            echo $(npm --version)
+            npm run frontend:install
+      # TODO: Install dependencies in the the backend API
       - run:
-          name: Build Server
-          command: npm run api:build
-  test:
-    docker:
-      - image: "cimg/base:stable"
-    steps:
-      - node/install
-      - node/install-yarn
-      - checkout
-      - install_client
-      - install_server
+          name: Install API Dependencies
+          command: |
+           echo "TODO: Install dependencies in the the backend API  "
+      # TODO: Lint the frontend
       - run:
-          name: Test Client
-          command: yarn udagram-frontend:test
+          name: Front-End Lint
+          command: |
+            echo "TODO: Lint the frontend"
+      # TODO: Build the frontend app
       - run:
-          name: Test Server
-          command: npm run api:test
+          name: Front-End Build
+          command: |
+            echo "TODO: Build the frontend app"
+      # TODO: Build the backend API
+      - run:
+          name: API Build
+          command: |
+            echo "TODO: Build the backend API"
+  # deploy step will run only after manual approval
   deploy:
     docker:
       - image: "cimg/base:stable"
+      # more setup needed for aws, node, elastic beanstalk
     steps:
-      - node/install
-      - node/install-yarn
-      - aws-cli/setup
+      - node/install:
+          node-version: '14.15'
       - eb/setup
+      - aws-cli/setup
       - checkout
-      - install_client
-      - install_server
       - run:
-          name: Deploy Client
-          command: npm run frontend:deploy1
-      - run:
-          name: Deploy Server
-          command: npm run api:deploy
+          name: Deploy App
+          # TODO: Install, build, deploy in both apps
+          command: |
+            echo "# TODO: Install, build, deploy in both apps"
 
 workflows:
-  build_test_deploy:
+  udagram:
     jobs:
       - build
-      - test:
+      - hold:
+          filters:
+            branches:
+              only:
+                - master
+          type: approval
           requires:
             - build
       - deploy:
           requires:
-            - test
+            - hold
