@@ -90,10 +90,10 @@ jobs:
       - checkout:
           path: ~/app
       - node/install-packages:
-          app-dir: ./udagram/udagram-frontend
+          app-dir: udagram/udagram-frontend
       - run:
           name: Build Frontend
-          command: npm run frontend:build
+          command: npm run build
       - aws-cli/install
       - run:
           name: Deploy Frontend
