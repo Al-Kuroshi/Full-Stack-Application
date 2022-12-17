@@ -119,7 +119,7 @@ jobs:
       - run:
           name: Front-End Deploy
           command: |
-            npm run frontend:deploy
+            npm run frontend:deploy1
       # Installing the Backend dependencies
       - run:
           name: Back-End Install
