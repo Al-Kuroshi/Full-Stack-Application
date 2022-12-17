@@ -131,7 +131,7 @@ jobs:
       - install_server
       - run:
           name: Build Client
-          command: yarn udagram-frontend:build
+          command: npm run frontend:build
       - run:
           name: Build Server
           command: npm run api:build
