@@ -99,7 +99,7 @@ commands:
             - v1-dependencies-
       - run:
           name: Install Client Dependencies
-          command: yarn udagram-frontend:install
+          command: npm udagram-frontend:install
       - save_cache:
           paths:
             - node_modules
