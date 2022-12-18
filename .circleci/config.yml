@@ -82,76 +82,100 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@5.0.1
-  aws-cli: circleci/aws-cli@1.3.1
-  aws-elastic-beanstalk: circleci/aws-elastic-beanstalk@2.0.1
+  node: circleci/node@4.1.0
+  aws-cli: circleci/aws-cli@2.0.3
+  eb: circleci/aws-elastic-beanstalk@1.0.0
+
+commands:
+  install_client:
+    description: "command for Client Installation"
+    steps:
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            # Find a cache corresponding to this specific package.json checksum
+            # when this file is changed, this key will fail
+            - v1-dependencies-{{ checksum "package.json" }}
+            # Find the most recently generated cache used from any branch
+            - v1-dependencies-
+      - run:
+          name: Install Client Dependencies
+          command: yarn frontend:install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+  install_server:
+    description: "command for Server Installation"
+    steps:
+      - restore_cache:
+          keys:
+            - v2-dependencies-{{ checksum "package.json" }}
+            - v2-dependencies-
+      - run:
+          name: Install Server Dependencies
+          command: yarn api:install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v2-dependencies-{{ checksum "package.json" }}
+
 jobs:
-  build-and-deploy:
+  build:
     docker:
-      - image: 'cimg/base:stable'
+      - image: "cimg/base:stable"
     steps:
       - node/install
+      - node/install-yarn
       - checkout
+      - install_client
+      - install_server
+      - run:
+          name: Build Client
+          command: yarn frontend:build
+      - run:
+          name: Build Server
+          command: yarn api:build
+  test:
+    docker:
+      - image: "cimg/base:stable"
+    steps:
+      - node/install
+      - node/install-yarn
+      - checkout
+      - install_client
+      - install_server
+      - run:
+          name: Test Client
+          command: yarn frontend:test
+      - run:
+          name: Test Server
+          command: yarn api:test
+  deploy:
+    docker:
+      - image: "cimg/base:stable"
+    steps:
+      - node/install
+      - node/install-yarn
       - aws-cli/setup
-      # Installing the frontend dependencies
+      - eb/setup
+      - checkout
+      - install_client
+      - install_server
       - run:
-          name: Front-End Install
-          command: |
-            npm run frontend:install
-      # - run:
-      #     name: Front-End Install Karma Cli
-      #     command: |
-      #       npm run frontend:karmaCli
-      # - run:
-      #     name: Front-End Tests
-      #     command: |
-      #       npm run frontend:test
-      # - run:
-      #     name: Front-End End-to-end Testing
-      #     command: |
-      #       npm run frontend:e2e
+          name: Deploy Client
+          command: yarn frontend:deploy3
+      - run:
+          name: Deploy Server
+          command: yarn api:deploy3
 
-      # Building the frontend
-      - run:
-          name: Front-End Build
-          command: |
-            yarn frontend:build
-      # Deploying the frontend to AWS S3
-      - run:
-          name: Front-End Deploy
-          command: |
-            npm run frontend:deploy3
-      # Installing the Backend dependencies
-      - run:
-          name: Back-End Install
-          command: |
-            npm run api:install
-      # Changing the main entry point in package.json for the Backend
-      - run:
-          name: Back-End Change Main Entry Point
-          command: |
-            npm run api:change-main
-      # Building the backend
-      - run:
-          name: Back-End Build
-          command: |
-            npm run api:build
-      # Installing AWS Elastic Beanstalk CLI
-      - run:
-          name: Installing AWS Elasticbeanstalk
-          command: |
-            npm run backend:aws-eb
-      # Deploying the backend to AWS Elastic Beanstalk
-      - run:
-          name: Back-End Deploy
-          command: |
-            npm run api:deploy3
 workflows:
-  build-and-deploy:
+  build_test_deploy:
     jobs:
-      - build-and-deploy:
-          context: aws
-          filters:
-            branches:
-              only:
-                - main
+      - build
+      - test:
+          requires:
+            - build
+      - deploy:
+          requires:
+            - test
