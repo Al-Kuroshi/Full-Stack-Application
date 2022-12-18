@@ -115,7 +115,7 @@ jobs:
       - run:
           name: Front-End Build
           command: |
-            npm run frontend:build
+            yarn frontend:build
       # Deploying the frontend to AWS S3
       - run:
           name: Front-End Deploy
