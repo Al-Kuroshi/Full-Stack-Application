@@ -164,10 +164,10 @@ jobs:
       - install_server
       - run:
           name: Deploy Front-End
-          command: yarn frontend:deploy3
+          command: yarn frontend:deploy
       - run:
           name: Deploy Back-End
-          command: yarn api:deploy3
+          command: yarn api:deploy
 
 workflows:
   build_test_deploy:
