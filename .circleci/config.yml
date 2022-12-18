@@ -147,10 +147,10 @@ jobs:
       - install_server
       - run:
           name: Test Client
-#          command: yarn frontend:test
+          command: yarn frontend:test
       - run:
           name: Test Server
-#          command: yarn api:test
+          command: yarn api:test
   deploy:
     docker:
       - image: "cimg/base:stable"
