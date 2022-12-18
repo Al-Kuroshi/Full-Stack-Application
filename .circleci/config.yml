@@ -135,7 +135,7 @@ jobs:
           command: yarn frontend:build
       - run:
           name: Build Server
-          command: npm run api:build3
+          command: yarn api:build
   test:
     docker:
       - image: "cimg/base:stable"
