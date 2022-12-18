@@ -150,7 +150,7 @@ jobs:
           command: yarn frontend:test
       - run:
           name: Test Back-End
-          command: yarn api:test
+          command: yarn frontend:test
   deploy:
     docker:
       - image: "cimg/base:stable"
