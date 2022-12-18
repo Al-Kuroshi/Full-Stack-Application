@@ -6,9 +6,8 @@ export const environment = {
   // production: false,
   production: true,
   // appName: 'Udagram',
-  appName: 'faisal-udagram',
-  // apiHost: 'http://localhost:8080/api/v0'
-  apiHost: "http://aws-circle-ci-api-dev.eba-2phxz2ty.us-east-2.elasticbeanstalk.com/api/v0",
+  appName: 'faisal-bucket-2',
+  apiHost: 'http://aws-api-dev.eba-epph7hhk.us-east-1.elasticbeanstalk.com/api/v0',
 
 };
 

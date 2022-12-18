@@ -16,6 +16,7 @@
     "clean": "rm -rf www/ || true",
     "deploy": "npm run build && eb list && eb use aws-circle-ci-api-dev && eb deploy",
     "deploy1": "eb list && eb use udagram-api-dev && eb deploy",
+    "deploy3": "chmod +x ./bin/deploy.sh && ./bin/deploy.sh",
     "build": "npm install . && npm run clean && tsc && cp -rf src/config www/config && cp -R .elasticbeanstalk www/.elasticbeanstalk && cp .npmrc www/.npmrc && cp package.json www/package.json && cd www && zip -r Archive.zip . && cd ..",
     "build2": "npm install . && npm run clean && tsc && cp -rf src/config www/config && cp -R .elasticbeanstalk www/.elasticbeanstalk && cp .npmrc www/.npmrc && cp package.json www/package.json && cd www && cd ..",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -30,6 +31,7 @@
     "bcryptjs": "2.4.3",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
+    "db-migrate-pg": "^1.2.2",
     "dotenv": "^8.2.0",
     "email-validator": "^2.0.4",
     "express": "^4.16.4",
