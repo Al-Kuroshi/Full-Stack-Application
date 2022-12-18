@@ -99,7 +99,7 @@ commands:
             # Find the most recently generated cache used from any branch
             - v1-dependencies-
       - run:
-          name: Install Client Dependencies
+          name: Install Front-End Dependencies
           command: yarn frontend:install
       - save_cache:
           paths:
@@ -113,7 +113,7 @@ commands:
             - v2-dependencies-{{ checksum "package.json" }}
             - v2-dependencies-
       - run:
-          name: Install Server Dependencies
+          name: Install Back-End Dependencies
           command: yarn api:install
       - save_cache:
           paths:
@@ -131,10 +131,10 @@ jobs:
       - install_client
       - install_server
       - run:
-          name: Build Client
+          name: Build Front-End
           command: yarn frontend:build
       - run:
-          name: Build Server
+          name: Build Back-End
           command: yarn api:build
   test:
     docker:
@@ -146,10 +146,10 @@ jobs:
       - install_client
       - install_server
       - run:
-          name: Test Client
+          name: Test Front-End
           command: yarn frontend:test
       - run:
-          name: Test Server
+          name: Test Back-End
           command: yarn api:test
   deploy:
     docker:
@@ -163,19 +163,19 @@ jobs:
       - install_client
       - install_server
       - run:
-          name: Deploy Client
+          name: Deploy Front-End
           command: yarn frontend:deploy3
       - run:
-          name: Deploy Server
+          name: Deploy Back-End
           command: yarn api:deploy3
 
 workflows:
   build_test_deploy:
     jobs:
       - build
-#      - test:
-#          requires:
-#            - build
+      - test:
+          requires:
+            - build
       - deploy:
-#          requires:
-#            - test
+          requires:
+            - test
