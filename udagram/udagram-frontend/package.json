@@ -6,7 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "export NODE_OPTIONS=--openssl-legacy-provider; ng build",
     "deploy": "npm install -f && npm run build && chmod +x bin/deploy.sh && bin/deploy.sh",
     "deploy2": "npm install -f && chmod +x bin/deploy.sh && bin/deploy.sh",
     "deploy1": "npm run build && aws s3 sync ./www s3://faisal-udagram",
