@@ -131,10 +131,10 @@ jobs:
       - install_client
       - install_server
       - run:
-          name: Build frontend
+          name: Build Client
           command: yarn frontend:build
       - run:
-          name: Build Backend
+          name: Build Server
           command: yarn api:build
   test:
     docker:
@@ -146,10 +146,10 @@ jobs:
       - install_client
       - install_server
       - run:
-          name: Test frontend
+          name: Test Client
 #          command: yarn frontend:test
       - run:
-          name: Test Backend
+          name: Test Server
 #          command: yarn api:test
   deploy:
     docker:
@@ -163,10 +163,10 @@ jobs:
       - install_client
       - install_server
       - run:
-          name: Deploy frontend
+          name: Deploy Client
           command: yarn frontend:deploy3
       - run:
-          name: Deploy Backend
+          name: Deploy Server
           command: yarn api:deploy3
 
 workflows:
