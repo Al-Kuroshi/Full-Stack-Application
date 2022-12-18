@@ -131,10 +131,10 @@ jobs:
       - install_client
       - install_server
       - run:
-          name: Build Client
+          name: Build frontend
           command: yarn frontend:build
       - run:
-          name: Build Server
+          name: Build Backend
           command: yarn api:build
   test:
     docker:
@@ -146,11 +146,11 @@ jobs:
       - install_client
       - install_server
       - run:
-          name: Test Client
-          command: yarn frontend:test
+          name: Test frontend
+#          command: yarn frontend:test
       - run:
-          name: Test Server
-          command: yarn api:test
+          name: Test Backend
+#          command: yarn api:test
   deploy:
     docker:
       - image: "cimg/base:stable"
@@ -163,10 +163,10 @@ jobs:
       - install_client
       - install_server
       - run:
-          name: Deploy Client
+          name: Deploy frontend
           command: yarn frontend:deploy3
       - run:
-          name: Deploy Server
+          name: Deploy Backend
           command: yarn api:deploy3
 
 workflows:
