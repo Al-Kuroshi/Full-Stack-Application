@@ -167,7 +167,10 @@ jobs:
           command: yarn frontend:deploy
       - run:
           name: Deploy Back-End
-          command: yarn api:deploy
+#          command: yarn api:deploy
+          command: api:eb setenv AWS_BUCKET=$AWS_BUCKET POSTGRES_HOST=$POSTGRES_HOST DB_PORT=$DB_PORT POSTGRES_DB=$POSTGRES_DB POSTGRES_USERNAME=$POSTGRES_USERNAME POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+          eb deploy
+
 
 workflows:
   build_test_deploy:
